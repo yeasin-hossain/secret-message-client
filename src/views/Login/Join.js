@@ -1,10 +1,23 @@
+/* eslint-disable no-multi-assign */
 import axios from 'axios';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { yupUserName, yupUserSchema } from '../../yupValidation/yupValidation';
+import { yupLoginUser, yupUserName, yupUserSchema } from '../../yupValidation/yupValidation';
+import LoginForm from './LoginForm';
 
 const Join = () => {
-    const [userInfo, setUserInfo] = useState({});
+    const [loginToggle, setLoginToggle] = useState(false);
+    const [userInfo, setUserInfo] = useState({
+        name: '',
+        userName: '',
+        password: '',
+    });
+
+    const [loginUserData, setLoginUserData] = useState({
+        userName: '',
+        password: '',
+    });
+
     const isExistUser = async (e) => {
         try {
             const userName = e.target.value.split(' ').join('').toLowerCase();
@@ -18,7 +31,7 @@ const Join = () => {
             if (user.data.length === 0) {
                 setUserInfo({ ...userInfo, userName });
             } else {
-                const error = new Error('This UserName Already Taken');
+                const error = new Error(`${userName} Is Already Taken`);
                 throw error;
             }
         } catch (err) {
@@ -29,43 +42,121 @@ const Join = () => {
     const newUser = async (e) => {
         e.preventDefault();
         try {
-            await yupUserSchema.validate(userInfo, {
+            const validate = await yupUserSchema.isValid(userInfo, {
                 abortEarly: false,
             });
+            if (!validate) {
+                const error = new Error(`All felid Is Required`);
+                throw error;
+            }
             const savedUser = await axios.post(`http://localhost:5000/user/newUser`, userInfo);
-            console.log(savedUser);
+
+            // eslint-disable-next-line no-unused-expressions
+            savedUser.status === 200 && toast.success('savedUser successfully');
         } catch (err) {
             toast.error(err.message);
         }
     };
+
+    // eslint-disable-next-line consistent-return
+    const loginUser = async (e) => {
+        e.preventDefault();
+        try {
+            const validate = await yupLoginUser.isValid(loginUserData, {
+                abortEarly: false,
+            });
+            if (!validate) {
+                return toast.error('Invalid Credential');
+            }
+            const loggedUser = await axios.post(
+                `http://localhost:5000/user/loginUser`,
+                loginUserData
+            );
+            if (loggedUser.data.user) {
+                toast.dark(`Welcome ${loggedUser.data.user.name}🦄`, {
+                    position: 'top-center',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                return toast.error(loggedUser.data.message);
+            }
+            return toast.error(loggedUser.data.message);
+        } catch (err) {
+            console.log(err);
+            // toast.error(err.message);
+        }
+    };
     return (
         <div className="container mt-5">
-            <form onSubmit={newUser}>
-                <div className="mb-3 row">
-                    <div className="col-sm-10">
-                        <input
-                            type="text"
-                            className="form-control-plaintext"
-                            id="staticUser"
-                            placeholder="Enter User Name"
-                            onBlur={isExistUser}
-                        />
+            {loginToggle ? (
+                <LoginForm
+                    loginUser={loginUser}
+                    setLoginUserData={setLoginUserData}
+                    loginUserData={loginUserData}
+                />
+            ) : (
+                <form onSubmit={newUser}>
+                    <div className="mb-3 row">
+                        <div className="col-sm-10">
+                            <input
+                                type="text"
+                                className="form-control-plaintext"
+                                id="staticName"
+                                placeholder="Enter Full Name"
+                                value={userInfo.name}
+                                onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className="mb-3 row">
-                    <div className="col-sm-10">
-                        <input
-                            type="password"
-                            className="form-control"
-                            id="inputPassword"
-                            onChange={(e) => setUserInfo({ ...userInfo, password: e.target.value })}
-                        />
+                    <div className="mb-3 row">
+                        <div className="col-sm-10">
+                            <input
+                                type="text"
+                                className="form-control-plaintext"
+                                id="staticUser"
+                                placeholder="Enter User Name"
+                                onBlur={isExistUser}
+                            />
+                        </div>
                     </div>
-                </div>
-                <button className="btn btn-primary" type="submit">
-                    Join
+                    <div className="mb-3 row">
+                        <div className="col-sm-10">
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="inputPassword"
+                                onChange={(e) =>
+                                    setUserInfo({ ...userInfo, password: e.target.value })
+                                }
+                            />
+                        </div>
+                    </div>
+                    <button className="btn btn-primary" type="submit">
+                        Join
+                    </button>
+                </form>
+            )}
+            {loginToggle ? (
+                <button
+                    className="btn btn-warning mt-3"
+                    type="button"
+                    onClick={() => setLoginToggle(!loginToggle)}
+                >
+                    Signup
                 </button>
-            </form>
+            ) : (
+                <button
+                    className="btn btn-warning mt-3"
+                    type="button"
+                    onClick={() => setLoginToggle(!loginToggle)}
+                >
+                    Login
+                </button>
+            )}
         </div>
     );
 };
