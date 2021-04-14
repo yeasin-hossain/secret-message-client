@@ -32,7 +32,9 @@ const Join = () => {
                     abortEarly: false,
                 }
             );
-            const user = await axios.get(`http://localhost:5000/user/userName/${userName}`);
+            const user = await axios.get(
+                `https://shanto-message.herokuapp.com/user/userName/${userName}`
+            );
             if (user.data.length === 0) {
                 setUserInfo({ ...userInfo, userName });
             } else {
@@ -55,7 +57,10 @@ const Join = () => {
                 const error = new Error(`All felid Is Required`);
                 throw error;
             }
-            const savedUser = await axios.post(`http://localhost:5000/user/newUser`, userInfo);
+            const savedUser = await axios.post(
+                `https://shanto-message.herokuapp.com/user/newUser`,
+                userInfo
+            );
 
             // eslint-disable-next-line no-unused-expressions
             savedUser.status === 200 && toast.success('savedUser successfully');
@@ -75,7 +80,7 @@ const Join = () => {
                 return toast.error('Invalid Credential');
             }
             const loggedUser = await axios.post(
-                `http://localhost:5000/user/loginUser`,
+                `https://shanto-message.herokuapp.com/user/loginUser`,
                 loginUserData
             );
             if (loggedUser.data.user) {

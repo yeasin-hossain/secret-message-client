@@ -15,7 +15,7 @@ function WriteMessage({ userName }) {
                 abortEarly: false,
             });
             const savedMessage = await axios.post(
-                `http://localhost:5000/message/${userName}`,
+                `https://shanto-message.herokuapp.com/message/${userName}`,
                 message
             );
             console.log(savedMessage);

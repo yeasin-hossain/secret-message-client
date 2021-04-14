@@ -23,7 +23,9 @@ function ReadMessage({ userName }) {
                 //         abortEarly: false,
                 //     }
                 // );
-                const messagesData = await axios.get(`http://localhost:5000/message/${userName}`);
+                const messagesData = await axios.get(
+                    `https://shanto-message.herokuapp.com/message/${userName}`
+                );
                 if (messagesData.data.length !== 0) {
                     setMessages(messagesData.data);
                 } else {

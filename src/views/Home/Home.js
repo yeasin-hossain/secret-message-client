@@ -20,7 +20,9 @@ function Home() {
                 //         abortEarly: false,
                 //     }
                 // );
-                const user = await axios.get(`http://localhost:5000/user/userName/${userName}`);
+                const user = await axios.get(
+                    `https://shanto-message.herokuapp.com/user/userName/${userName}`
+                );
                 if (user.data.length !== 0) {
                     setExistUser(true);
                 } else {
