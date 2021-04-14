@@ -4,7 +4,7 @@ import RouterWrapper from './routes/RouterWraper';
 function App() {
     return (
         <>
-            <ToastContainer />
+            <ToastContainer position="top-center" />
             <RouterWrapper />
         </>
     );

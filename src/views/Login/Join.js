@@ -1,7 +1,9 @@
 /* eslint-disable no-multi-assign */
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { SecretContext } from '../../context/SecretContext';
 import { yupLoginUser, yupUserName, yupUserSchema } from '../../yupValidation/yupValidation';
 import LoginForm from './LoginForm';
 
@@ -17,7 +19,10 @@ const Join = () => {
         userName: '',
         password: '',
     });
+    const history = useHistory();
+    const { setUser, setLoggedIn } = useContext(SecretContext);
 
+    // Check User available or not
     const isExistUser = async (e) => {
         try {
             const userName = e.target.value.split(' ').join('').toLowerCase();
@@ -39,6 +44,7 @@ const Join = () => {
         }
     };
 
+    // Sign Up System
     const newUser = async (e) => {
         e.preventDefault();
         try {
@@ -73,23 +79,20 @@ const Join = () => {
                 loginUserData
             );
             if (loggedUser.data.user) {
-                toast.dark(`Welcome ${loggedUser.data.user.name}🦄`, {
-                    position: 'top-center',
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
-                return toast.error(loggedUser.data.message);
+                toast.dark(`Welcome ${loggedUser.data?.user.name}🦄`);
+                localStorage.setItem('user', JSON.stringify(loggedUser.data.user));
+                setUser(loggedUser.data.user);
+                setLoggedIn(true);
+                history.push(`/${loggedUser.data.user.userName}`);
+            } else {
+                return toast.error(loggedUser.data?.message);
             }
-            return toast.error(loggedUser.data.message);
         } catch (err) {
             console.log(err);
             // toast.error(err.message);
         }
     };
+
     return (
         <div className="container mt-5">
             {loginToggle ? (

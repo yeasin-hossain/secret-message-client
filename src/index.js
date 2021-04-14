@@ -3,11 +3,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import App from './App';
+import { SecretProvider } from './context/SecretContext';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <SecretProvider>
+            <App />
+        </SecretProvider>
     </React.StrictMode>,
     document.getElementById('root')
 );

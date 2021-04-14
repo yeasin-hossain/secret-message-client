@@ -14,7 +14,10 @@ function LoginForm({ loginUser, setLoginUserData, loginUserData }) {
                             name="userName"
                             value={loginUserData?.userName || ''}
                             onChange={(e) =>
-                                setLoginUserData({ ...loginUserData, userName: e.target.value })
+                                setLoginUserData({
+                                    ...loginUserData,
+                                    userName: e.target.value.split(' ').join('').toLowerCase(),
+                                })
                             }
                         />
                     </div>

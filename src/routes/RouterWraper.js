@@ -14,7 +14,6 @@ const RouterWrapper = () => (
                     </Route>
                 ))}
                 {Routes.map((router, index) => (
-                    // <Route key={index} exact path={router.path} component={router.component} />
                     // eslint-disable-next-line react/no-array-index-key
                     <PrivateRoute exact key={index} path={router.path}>
                         <router.component />

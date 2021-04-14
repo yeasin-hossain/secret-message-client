@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import * as yup from 'yup';
 
-function WriteMessage() {
+function WriteMessage({ userName }) {
     const [message, setMessage] = useState({ message: '' });
 
     const submitMessage = async (e) => {
@@ -15,7 +15,7 @@ function WriteMessage() {
                 abortEarly: false,
             });
             const savedMessage = await axios.post(
-                `http://localhost:5000/message/shantoxdp`,
+                `http://localhost:5000/message/${userName}`,
                 message
             );
             console.log(savedMessage);
