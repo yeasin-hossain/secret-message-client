@@ -8,6 +8,7 @@ import { yupLoginUser, yupUserName, yupUserSchema } from '../../yupValidation/yu
 import LoginForm from './LoginForm';
 
 const Join = () => {
+    console.log(process.env);
     const [loginToggle, setLoginToggle] = useState(false);
     const [userInfo, setUserInfo] = useState({
         name: '',

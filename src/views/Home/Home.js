@@ -37,7 +37,7 @@ function Home() {
     }, [userName]);
     console.log(isLoggedIn);
     return (
-        <div>
+        <div className="container">
             <Link to="/auth/join" className="btn btn-info">
                 Join
             </Link>

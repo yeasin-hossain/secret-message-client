@@ -10,12 +10,13 @@ function WriteMessage({ userName }) {
         const messageSchema = yup.object().shape({
             message: yup.string().max(400).required({ error: 'This Felid is required' }),
         });
+
         try {
             await messageSchema.validate(message, {
                 abortEarly: false,
             });
             const savedMessage = await axios.post(
-                `https://shanto-message.herokuapp.com/message/${userName}`,
+                `${process.env.REACT_APP_API_URL}/message/${userName}`,
                 message
             );
             console.log(savedMessage);
@@ -25,8 +26,9 @@ function WriteMessage({ userName }) {
         }
     };
     return (
-        <div>
-            <form className="form-control" onSubmit={submitMessage}>
+        <>
+            <h1 className="my-2">Write A Message For Your Dear!</h1>
+            <form onSubmit={submitMessage}>
                 <div className="mb-3">
                     <textarea
                         className="form-control"
@@ -40,7 +42,7 @@ function WriteMessage({ userName }) {
                     Submit
                 </button>
             </form>
-        </div>
+        </>
     );
 }
 

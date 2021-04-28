@@ -1,8 +1,11 @@
+/* eslint-disable react/void-dom-elements-no-children */
+import { Button, Col, Row } from 'antd';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { SecretContext } from '../../../context/SecretContext';
+import Messages from './Messages/Messages';
 
 function ReadMessage({ userName }) {
     const { setUser } = useContext(SecretContext);
@@ -17,14 +20,8 @@ function ReadMessage({ userName }) {
     useEffect(() => {
         const isExistUser = async () => {
             try {
-                // await yupUserName.validate(
-                //     { userName },
-                //     {
-                //         abortEarly: false,
-                //     }
-                // );
                 const messagesData = await axios.get(
-                    `https://shanto-message.herokuapp.com/message/${userName}`
+                    `${process.env.REACT_APP_API_URL}/message/${userName}`
                 );
                 if (messagesData.data.length !== 0) {
                     setMessages(messagesData.data);
@@ -40,15 +37,20 @@ function ReadMessage({ userName }) {
     }, [userName]);
     return (
         <div>
-            <button className="btn btn-danger" type="button" onClick={Logout}>
-                Logout
-            </button>
-            <ul className="list-group">
-                {messages.map((message, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <li key={index}>{message.message}</li>
-                ))}
-            </ul>
+            <Row>
+                <Col span={20} offset={4}>
+                    <Button type="danger" onClick={Logout}>
+                        Logout
+                    </Button>
+
+                    <ul className="list-group">
+                        {messages.map((message, index) => (
+                            // eslint-disable-next-line react/no-array-index-key
+                            <Messages key={index} message={message} />
+                        ))}
+                    </ul>
+                </Col>
+            </Row>
         </div>
     );
 }
