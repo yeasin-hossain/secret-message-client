@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import React, { useState } from 'react';
 import * as yup from 'yup';
 
@@ -10,16 +11,16 @@ function WriteMessage({ userName }) {
         const messageSchema = yup.object().shape({
             message: yup.string().max(400).required({ error: 'This Felid is required' }),
         });
-
+        const date = moment().format('MMMM Do YYYY, h:mm:ss a');
+        console.log(date);
         try {
             await messageSchema.validate(message, {
                 abortEarly: false,
             });
-            const savedMessage = await axios.post(
-                `${process.env.REACT_APP_API_URL}/message/${userName}`,
-                message
-            );
-            console.log(savedMessage);
+            await axios.post(`${process.env.REACT_APP_API_URL}/message/${userName}`, {
+                ...message,
+                date,
+            });
             setMessage({ message: '' });
         } catch (err) {
             console.log(err);

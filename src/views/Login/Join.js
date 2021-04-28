@@ -34,7 +34,7 @@ const Join = () => {
                 }
             );
             const user = await axios.get(
-                `https://shanto-message.herokuapp.com/user/userName/${userName}`
+                `${process.env.REACT_APP_API_URL}/user/userName/${userName}`
             );
             if (user.data.length === 0) {
                 setUserInfo({ ...userInfo, userName });
@@ -59,7 +59,7 @@ const Join = () => {
                 throw error;
             }
             const savedUser = await axios.post(
-                `https://shanto-message.herokuapp.com/user/newUser`,
+                `${process.env.REACT_APP_API_URL}/user/newUser`,
                 userInfo
             );
 
@@ -81,7 +81,7 @@ const Join = () => {
                 return toast.error('Invalid Credential');
             }
             const loggedUser = await axios.post(
-                `https://shanto-message.herokuapp.com/user/loginUser`,
+                `${process.env.REACT_APP_API_URL}/user/loginUser`,
                 loginUserData
             );
             if (loggedUser.data.user) {
