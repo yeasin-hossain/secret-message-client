@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { SecretContext } from '../../context/SecretContext';
 import { yupLoginUser, yupUserName, yupUserSchema } from '../../yupValidation/yupValidation';
 import LoginForm from './LoginForm';
+import TestLogin from './TestLogin';
 
 const Join = () => {
     console.log(process.env);
@@ -166,6 +167,11 @@ const Join = () => {
                     Login
                 </button>
             )}
+            <TestLogin
+                loginUser={loginUser}
+                setLoginUserData={setLoginUserData}
+                loginUserData={loginUserData}
+            />
         </div>
     );
 };
