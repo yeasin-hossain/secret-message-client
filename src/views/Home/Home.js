@@ -41,9 +41,6 @@ function Home() {
             <Link to="/auth/join" className="btn btn-info">
                 Join
             </Link>
-            <Link to="sheradeals://Shop/Daraz"  target="_blank" rel="noreferrer" className="btn btn-info">
-                Join
-            </Link>
             {existUser ? (
                 <div>
                     {isLoggedIn ? (
